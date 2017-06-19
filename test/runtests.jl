@@ -1,5 +1,4 @@
 using ComparisonDataset
 using Base.Test
 
-# write your own tests here
-@test 1 == 2
+@testset "Rect Tests" begin include("rect_tests.jl") end
