@@ -1,4 +1,3 @@
-using ComparisonDataset
 @testset "Rect" begin
   @testset "Basic" begin
     a = Rect(10, 20, 30, 40)
