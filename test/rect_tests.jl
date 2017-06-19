@@ -40,3 +40,14 @@ o5 = Rect(6,8,15,15)
 @test isoverlapping(o3,o4) == false
 @test isoverlapping(o3,o5) == false
 @test isoverlapping(o4,o5) == false
+
+r = randrect(20, 20, 10, 15)
+@test width(r) == 10
+@test height(r) == 15
+
+rects = [randrect(20, 20, 10, 15) for i in 1:100]
+borders = [left(r) > 0 &&
+           right(r) <= 20 &&
+           top(r) > 0 &&
+           bottom(r) <= 20 for r in rects]
+@test false ∉ borders

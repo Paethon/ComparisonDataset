@@ -41,8 +41,8 @@ Return a random rectangle given size and max coordinates
 """
 function randrect(maxx::Integer, maxy::Integer,
                   width::Integer, height::Integer)
-  @show top = rand(1:(maxy-height))
-  @show left = rand(1:(maxx-width))
+  top = rand(1:(maxy-height))
+  left = rand(1:(maxx-width))
   return Rect(top, left, top + height, left + width)
 end
 
