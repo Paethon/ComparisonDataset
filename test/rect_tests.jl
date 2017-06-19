@@ -43,13 +43,34 @@ o5 = CD.Rect(6,8,15,15)
 @test CD.isoverlapping(o3,o5) == false
 @test CD.isoverlapping(o4,o5) == false
 
+# Test random Rect generation
 r = CD.randrect(20, 20, 10, 15)
 @test CD.width(r) == 10
 @test CD.height(r) == 15
 
-rects = [CD.randrect(20, 20, 10, 15) for i in 1:100]
-borders = [CD.left(r) > 0 &&
+rects = (CD.randrect(20, 20, 10, 15) for i in 1:100)
+borders = (CD.left(r) > 0 &&
            CD.right(r) <= 20 &&
            CD.top(r) > 0 &&
-           CD.bottom(r) <= 20 for r in rects]
+           CD.bottom(r) <= 20 for r in rects)
 @test false ∉ borders
+
+# Test random non-overlapping Rect generation
+rects = CD.nonoverlappingrandrect(100,100,10,10,10)
+@test length(rects) == 10
+borders = (CD.left(r) > 0 &&
+           CD.right(r) <= 100 &&
+           CD.top(r) > 0 &&
+           CD.bottom(r) <= 100 for r in rects)
+@test false ∉ borders
+# Ensure none of the rects are overlapping
+overlapping = false
+for (a,b) in ((a,b) for a in rects, b in rects)
+  if a ≠ b && CD.isoverlapping(a,b)
+    overlapping = true
+    break
+  end
+end
+@test overlapping == false
+# Test for exhaustion during search
+@test_throws CD.ExhaustionError CD.nonoverlappingrandrect(20,20,10,10,100)

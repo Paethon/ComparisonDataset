@@ -45,3 +45,35 @@ function randrect(maxx::Integer, maxy::Integer,
   left = rand(1:(maxx-width))
   return Rect(top, left, top + height, left + width)
 end
+
+"""
+Error that is thrown when searching for non-overlapping patches reaches
+an upper limit of tries
+"""
+immutable ExhaustionError{T}
+  message::T
+end
+
+"""
+Return a Vector of rectangles that are all non-overlapping, given size and
+max coordinates
+"""
+function nonoverlappingrandrect(maxx::Integer, maxy::Integer,
+                                width::Integer, height::Integer,
+                                amount::Integer)
+  rects = Vector{Rect}()
+  const max_tries = 100 # How many tries until we give up?
+  for i in 1:amount
+    for tries in 1:max_tries
+      newrect = randrect(maxx, maxy, width, height)
+
+      if !any(x -> isoverlapping(newrect, x), rects)
+        push!(rects, newrect)
+        break
+      end
+
+      tries == max_tries && throw(ExhaustionError("$max_tries was not enough"))
+    end
+  end
+  return rects
+end
