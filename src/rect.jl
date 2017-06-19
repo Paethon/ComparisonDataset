@@ -45,6 +45,3 @@ function randrect(maxx::Integer, maxy::Integer,
   left = rand(1:(maxx-width))
   return Rect(top, left, top + height, left + width)
 end
-
-export Rect, randrect, isoverlapping
-export top, left, bottom, right, width, height

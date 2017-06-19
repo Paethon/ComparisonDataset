@@ -21,5 +21,3 @@ function grow(a::AbstractMatrix, scale::Int)
   end
   return res
 end
-
-export genpatch, paste!, grow
