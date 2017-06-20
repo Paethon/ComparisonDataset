@@ -1,5 +1,5 @@
 "Return an array of size n x n filled with random true/false values"
-genpatch(n::Integer) = [rand(Bool) for y in 1:n, x in 1:n]
+genpatch(T::Type, n::Integer) = T[rand(Bool) for y in 1:n, x in 1:n]
 
 "Insert given smaller array into bigger array"
 function paste!{T}(a::AbstractArray{T,2}, b::AbstractArray{T,2},
