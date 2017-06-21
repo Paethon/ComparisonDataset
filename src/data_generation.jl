@@ -6,6 +6,24 @@ end
 width(s::Size) = s.width
 height(s::Size) = s.height
 
+"Fill an array with random values selected from a given set"
+function genpatch!(patch::AbstractArray, set::Vector)
+  for i in 1:length(patch)
+    @inbounds patch[i] = rand(set)
+  end
+  return patch
+end
+genpatch!(patch::AbstractArray) = genpatch!(patch, Int8[0,1])
+
+"Return an array of size n x n filled with random values
+selected from a given set"
+function genpatch(set::Vector, n::Integer)
+  res = Matrix{eltype(set)}(n,n)
+  genpatch!(res, set)
+end
+"Return an array of size n x n filled with random values of 0/1"
+genpatch(n::Integer) = genpatch(Int8[0,1], n)
+
 """
 Return an Array of given size, filled with a specified number of
 randomly filled patches of a given size of which a certain amount are
@@ -21,13 +39,14 @@ function gensample(T::Type, size::Size, patchsize::Size,
   patchpos = nonoverlappingrandrect(width(size), height(size),
                 width(patchsize), height(patchsize), nbpatches)
   # Fill in the identical patches
-  patch = genpatch(T, width(patchsize))
+  patch = genpatch(width(patchsize))
   for i in 1:nbsame
     pos = pop!(patchpos)
     paste!(res, patch, left(pos), top(pos))
   end
+  # Fill in non-identical patches
   while !isempty(patchpos)
-    patch = genpatch(T, width(patchsize))
+    genpatch!(patch)
     pos = pop!(patchpos)
     paste!(res, patch, left(pos), top(pos))
   end

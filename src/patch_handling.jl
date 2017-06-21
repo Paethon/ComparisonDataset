@@ -1,6 +1,3 @@
-"Return an array of size n x n filled with random true/false values"
-genpatch(T::Type, n::Integer) = T[rand(Bool) for y in 1:n, x in 1:n]
-
 "Insert given smaller array into bigger array"
 function paste!{T}(a::AbstractArray{T,2}, b::AbstractArray{T,2},
                    col::Integer, row::Integer)
@@ -16,8 +13,10 @@ function grow(a::AbstractMatrix, scale::Int)
     for c in 0:size(a,1) - 1
       col = c*scale + 1
       row = r*scale + 1
-      res[col:col + scale - 1,row:row + scale - 1] = a[c + 1,r + 1]
+      @inbounds res[col:col + scale - 1,row:row + scale - 1] = a[c + 1,r + 1]
     end
   end
   return res
 end
+
+export grow

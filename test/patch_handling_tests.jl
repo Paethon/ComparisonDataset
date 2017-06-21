@@ -1,12 +1,5 @@
 CD = ComparisonDataset
 
-# Test patch generation
-@test size(CD.genpatch(Int8, 0)) == (0,0)
-patch = CD.genpatch(Int8, 50)
-@test size(patch) == (50, 50)
-@test 0 ∈ patch
-@test 1 ∈ patch
-
 # Test patch pasting
 z = zeros(Int, 10, 10)
 o = ones(Int, 2, 2)
