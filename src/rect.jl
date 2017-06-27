@@ -1,14 +1,14 @@
 """
 Type encoding a rectangular region
 """
-immutable Rect{T}
+struct Rect{T}
   top::T
   left::T
   bottom::T
   right::T
 
   # Constructor ensures that top is above bottom etc.
-  function Rect(t::T, l::T, b::T, r::T)
+  function Rect{T}(t::T, l::T, b::T, r::T) where T
     top = t > b ? b : t
     bottom = t > b ? t : b
     left = l > r ? r : l

@@ -1,4 +1,4 @@
-immutable Size{T}
+struct Size{T}
   height::T
   width::T
 end
