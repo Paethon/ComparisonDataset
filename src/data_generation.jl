@@ -2,6 +2,7 @@ struct Size{T}
   height::T
   width::T
 end
+Size(size::T) where T<:Int = Size(size, size)
 
 width(s::Size) = s.width
 height(s::Size) = s.height
