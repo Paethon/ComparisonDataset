@@ -7,7 +7,11 @@ Size(size::T) where T<:Int = Size(size, size)
 width(s::Size) = s.width
 height(s::Size) = s.height
 
-"Fill an array with random values selected from a given set"
+"""
+genpatch!(patch::AbstractArray, set::Vector)
+
+Fill an array with random values selected from a given set
+"""
 function genpatch!(patch::AbstractArray, set::Vector)
   for i in 1:length(patch)
     @inbounds patch[i] = rand(set)
