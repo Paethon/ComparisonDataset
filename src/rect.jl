@@ -26,6 +26,8 @@ width(r::Rect) = r.right - r.left
 height(r::Rect) = r.bottom - r.top
 
 """
+isoverlapping(a::Rect, b::Rect)
+
 Return true if two rectangles are overlapping.
 Warning: If one shape completely contains the other one this will not work!
 """
@@ -37,6 +39,8 @@ function isoverlapping(a::Rect, b::Rect)
 end
 
 """
+randrect(maxx::Integer, maxy::Integer, width::Integer, height::Integer)
+
 Return a random rectangle given size and max coordinates
 """
 function randrect(maxx::Integer, maxy::Integer,
@@ -47,7 +51,7 @@ function randrect(maxx::Integer, maxy::Integer,
 end
 
 """
-Error that is thrown when searching for non-overlapping patches reaches
+Error that is thrown when the search for non-overlapping patches reaches
 an upper limit of tries
 """
 immutable ExhaustionError{T}
@@ -55,16 +59,20 @@ immutable ExhaustionError{T}
 end
 
 """
+nonoverlappingrandrect(maxx, maxy, width, height, amount; maxtries = 100)
+
 Return a Vector of rectangles that are all non-overlapping, given size and
-max coordinates
+max coordinates.
+
+maxtries defines how many times we want to try to find a non-overlapping
+  orientation. After this we get an ExhaustionError
 """
 function nonoverlappingrandrect(maxx::Integer, maxy::Integer,
                                 width::Integer, height::Integer,
-                                amount::Integer)
+                                amount::Integer; maxtries = 100)
   rects = Vector{Rect}()
-  const max_tries = 100 # How many tries until we give up?
   for i in 1:amount
-    for tries in 1:max_tries
+    for tries in 1:maxtries
       newrect = randrect(maxx, maxy, width, height)
 
       if !any(x -> isoverlapping(newrect, x), rects)
@@ -72,7 +80,7 @@ function nonoverlappingrandrect(maxx::Integer, maxy::Integer,
         break
       end
 
-      tries == max_tries && throw(ExhaustionError("$max_tries was not enough"))
+      tries == maxtries && throw(ExhaustionError("$max_tries was not enough"))
     end
   end
   return rects
