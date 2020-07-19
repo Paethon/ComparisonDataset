@@ -16,7 +16,7 @@ struct Rect{T}
     new(top, left, bottom, right)
   end
 end
-Rect{T}(t::T, l::T, b::T, r::T) = Rect{T}(t, l, b, r)
+Rect(t::T, l::T, b::T, r::T) where T = Rect{T}(t, l, b, r)
 
 top(r::Rect) = r.top
 left(r::Rect) = r.left
@@ -54,7 +54,7 @@ end
 Error that is thrown when the search for non-overlapping patches reaches
 an upper limit of tries
 """
-immutable ExhaustionError{T}
+struct ExhaustionError{T}
   message::T
 end
 

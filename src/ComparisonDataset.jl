@@ -1,15 +1,14 @@
-__precompile__()
+# module ComparisonDataset
 
-module ComparisonDataset
+using Images, Random, Revise
+import Base: size, rand, ==
+import Random: rand!
 
-using Images
-import Base: size, rand, rand!, ==
+includet("rect.jl")
+includet("data_generation.jl")
+includet("patch.jl")
+includet("sample.jl")
 
-include("rect.jl")
-include("data_generation.jl")
-include("patch.jl")
-include("sample.jl")
-
-export Size, Patch, Sample
-export render
-end # module
+# export Size, Patch, Sample
+# export render
+# end # module

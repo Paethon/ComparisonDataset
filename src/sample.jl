@@ -12,11 +12,11 @@ Sample(size::Size{I}, background::T, set::Vector{T}) where {I<:Integer, T} =
   Sample(size, Vector{Patch{T,I}}(), background, Set(set))
 
 patches(s::Sample) = s.patches
-size(s::Sample) = (height(s.size), width(s.size))
-size(s::Sample, i::Integer) = i == 1 ? height(s.size) : width(s.size)
+Base.size(s::Sample) = (height(s.size), width(s.size))
+Base.size(s::Sample, i::Integer) = i == 1 ? height(s.size) : width(s.size)
 
 "Fill a sample with random patches"
-function rand(s::Sample{T,I}; patchsize::Size = Size(8), nbpatches::Integer = 5,
+function Base.rand(s::Sample{T,I}; patchsize::Size = Size(8), nbpatches::Integer = 5,
   nbsame::Integer = 3, diff::Integer = 1) where {T, I<:Integer}
   res = deepcopy(s)
   # Gather non-overlapping positions for patches

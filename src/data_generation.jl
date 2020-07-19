@@ -18,16 +18,16 @@ function genpatch!(patch::AbstractArray, set::Vector)
   end
   return patch
 end
-genpatch!(patch::AbstractArray) = genpatch!(patch, Int8[0,1])
+genpatch!(patch::AbstractArray) = genpatch!(patch, UInt8[0,255])
 
 "Return an array of size n x n filled with random values
 selected from a given set"
 function genpatch(set::Vector, n::Integer)
-  res = Matrix{eltype(set)}(n,n)
+  res = Matrix{eltype(set)}(undef, n,n)
   genpatch!(res, set)
 end
 "Return an array of size n x n filled with random values of 0/1"
-genpatch(n::Integer) = genpatch(Int8[0,1], n)
+genpatch(n::Integer) = genpatch(UInt8[0,255], n)
 
 """
 Return an Array of given size, filled with a specified number of
@@ -39,7 +39,8 @@ function gensample(T::Type, size::Size, patchsize::Size,
   @assert nbpatches >= nbsame "Number of identical patches has to be <=
             number of total patches!"
   # Generate image
-  res = zeros(T, width(size), height(size))
+  # res = zeros(T, width(size), height(size))
+  res = fill(convert(T, 128), (width(size), height(size)))
   # Gather non-overlapping positions for patches
   patchpos = nonoverlappingrandrect(width(size), height(size),
                 width(patchsize), height(patchsize), nbpatches)
@@ -60,4 +61,4 @@ end
 
 gensample(size::Size, patchsize::Size,
   nbpatches::Int, nbsame::Int) =
-    gensample(Int8, size, patchsize, nbpatches, nbsame)
+    gensample(UInt8, size, patchsize, nbpatches, nbsame)

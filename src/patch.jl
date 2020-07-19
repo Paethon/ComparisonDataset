@@ -9,12 +9,12 @@ struct Patch{T, I<:Integer}
 end
 
 function Patch(s::Size, set::Set{T}, top::I, left::I) where {T, I<:Integer}
-  mat = Matrix{T}(height(s), width(s))
+  mat = Matrix{T}(undef, height(s), width(s))
   return Patch(mat, set, top, left)
 end
 
 function Patch(s::Size, set::Vector{T}, top::I, left::I) where {T, I<:Integer}
-  mat = Matrix{T}(height(s), width(s))
+  mat = Matrix{T}(undef, height(s), width(s))
   return Patch(mat, Set(set), top, left)
 end
 
@@ -30,7 +30,7 @@ rand(::Type{Patch}, s::Size, set::Vector, top, left)
 
 Generate a patch containing random elements from set
 """
-function rand(::Type{Patch}, s::Size, set::Vector, top::I, left::I) where I<:Integer
+function Base.rand(::Type{Patch}, s::Size, set::Vector, top::I, left::I) where I<:Integer
   mat = rand(set, height(s), width(s))
   return Patch(mat, Set(set), top, left)
 end
@@ -40,7 +40,7 @@ rand(::Type{Patch}, s::Size, set::Set, top, left)
 
 Generate a patch containing random elements from set
 """
-function rand(::Type{Patch}, s::Size, set::Set, top::I, left::I) where I<:Integer
+function Base.rand(::Type{Patch}, s::Size, set::Set, top::I, left::I) where I<:Integer
   return rand(Patch, s, collect(set), top, left)
 end
 
@@ -49,7 +49,7 @@ rand!(p::Patch)
 
 Populate a patch with random values
 """
-function rand!(p::Patch)
+function Random.rand!(p::Patch)
   rand!(content(p), collect(set(p)))
 end
 
@@ -116,12 +116,12 @@ Scales array using nearest neighbor by an integer factor
 """
 function grow(a::AbstractMatrix, scale::Integer)
   @assert scale > 0 "You can not grow an array by an amount < 1: $scale"
-  res = Matrix{eltype(a)}(size(a,1)*scale, size(a,2)*scale)
+  res = Matrix{eltype(a)}(undef, size(a,1)*scale, size(a,2)*scale)
   for r in 0:size(a,2) - 1
     for c in 0:size(a,1) - 1
       col = c*scale + 1
       row = r*scale + 1
-      @inbounds res[col:col + scale - 1,row:row + scale - 1] = a[c + 1,r + 1]
+      @inbounds res[col:col + scale - 1,row:row + scale - 1] .= a[c + 1,r + 1]
     end
   end
   return res
